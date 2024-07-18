@@ -1,0 +1,29 @@
+name: Daily Commits
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      run: |
+        git config --global user.name 'manvith12'
+        git config --global user.email 'manvith270706@gmail.com'
+
+    - name: Create and push commits
+      run: |
+        for ((i=1; i<=7; i++)); do
+          timestamp=$(date +'%Y-%m-%d_%H-%M-%S')
+          file_name="commit_${timestamp}_${i}.txt"
+          echo "Commit ${i} generated at ${timestamp}" > "${file_name}"
+          git add "${file_name}"
+          git commit -m "Automated commit ${i} on ${timestamp}"
+          git push origin master
+        done
